@@ -25,7 +25,8 @@ jobs:
       
     - name: Depoyu Güncelle
       run: |
-        git config --global user.name "codermert@bk.ru"
+        git add .
+        git config --global user.email "codermert@bk.ru"
         git config --global user.name "codermert"
         git commit -a -m "🕰 Otomatik Paylaşım"
         git push
