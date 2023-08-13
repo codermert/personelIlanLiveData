@@ -2,7 +2,7 @@ name: Fetch and Update Data
 
 on:
   schedule:
-    - cron: '*/1 * * * *'  # Her 5 dakikada bir çalıştır
+    - cron: '*/5 * * * *'  # Her 5 dakikada bir çalıştır
 
 jobs:
   fetch-and-update-data:
