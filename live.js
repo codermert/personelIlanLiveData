@@ -1,19 +1,26 @@
 const fs = require('fs');
-const axios = require('axios');
+const https = require('https');
 const cheerio = require('cheerio');
 
 const baseUrl = 'https://kamuilan.sbb.gov.tr/';
 
-axios.get(baseUrl, {
-  headers: {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-  }
-})
-  .then(response => {
-    const html = response.data;
-    const $ = cheerio.load(html);
+const options = {
+  hostname: 'kamuilan.sbb.gov.tr',
+  path: '/',
+  method: 'GET'
+};
 
+const req = https.request(options, response => {
+  let data = '';
+
+  response.on('data', chunk => {
+    data += chunk;
+  });
+
+  response.on('end', () => {
     const ilanlar = [];
+
+    const $ = cheerio.load(data);
 
     $('#nav2 > li').each((index, element) => {
       const timeElement = $(element).find('.cbp_tmtime');
@@ -39,14 +46,18 @@ axios.get(baseUrl, {
 
     const jsonData = JSON.stringify(ilanlar, null, 2);
 
-    fs.writeFile('ilanlar.json', jsonData, 'utf8', (err) => {
+    fs.writeFile('ilanlar.json', jsonData, 'utf8', err => {
       if (err) {
         console.error('Dosya kaydedilirken bir hata oluştu:', err);
       } else {
         console.log('Veriler "ilanlar.json" dosyasına kaydedildi.');
       }
     });
-  })
-  .catch(error => {
-    console.error('Hata:', error);
   });
+});
+
+req.on('error', error => {
+  console.error('Hata:', error);
+});
+
+req.end();
