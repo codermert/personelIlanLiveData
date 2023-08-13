@@ -4,7 +4,11 @@ const cheerio = require('cheerio');
 
 const baseUrl = 'https://kamuilan.sbb.gov.tr/';
 
-axios.get(baseUrl)
+axios.get(baseUrl, {
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+  }
+})
   .then(response => {
     const html = response.data;
     const $ = cheerio.load(html);
