@@ -1,11 +1,11 @@
-name: Fetch Data
+name: Fetch and Update Data
 
 on:
   schedule:
     - cron: '*/1 * * * *'  # Her 5 dakikada bir çalıştır
 
 jobs:
-  fetch-data:
+  fetch-and-update-data:
     runs-on: ubuntu-latest
     
     steps:
@@ -20,13 +20,11 @@ jobs:
     - name: Install dependencies
       run: npm install
       
-    - name: Fetch Data and Save
-      run: node live.js  # Script
-      
-    - name: Depoyu Güncelle
+    - name: Fetch Data and Update ilanlar.json
       run: |
-        git add .
+        node live.js  # Script
+        git add ilanlar.json
         git config --global user.email "codermert@bk.ru"
         git config --global user.name "codermert"
-        git commit -a -m "🕰 Otomatik Paylaşım"
+        git commit -m "🕰 Otomatik Veri Güncelleme"
         git push
