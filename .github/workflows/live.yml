@@ -1,0 +1,31 @@
+name: Fetch Data
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Her 10 dakikada bir çalıştır
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Fetch Data and Save
+      run: node live.js  # Script
+      
+    - name: Depoyu Güncelle
+      run: |
+        git config --global user.name "codermert@bk.ru"
+        git config --global user.name "codermert"
+        git commit -a -m "🕰 Otomatik Paylaşım"
+        git push
